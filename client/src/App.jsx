@@ -15,7 +15,7 @@ function App() {
         <Route path='/contactlist' element={<ContactListPage/>}/>
         <Route path='/searchcontact' element={<SearchContact/>}/>
         <Route path='/signup' element={<SignUpPage/>}/>
-        <Routes path='/signin' element={<SignInPage/>}/>
+        <Route path='/signin' element={<SignInPage/>}/>
       </Routes>
     </Router>
   )
