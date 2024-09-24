@@ -26,7 +26,7 @@ function ContactSearch() {
   };
 
   return (
-    <section className="contact-search">
+    <section className="contact-search mt-48">
       <main className="container mx-auto px-4 py-8">
         <h1 className="text-3xl font-bold mb-6">Search for a Contact</h1>
         <form onSubmit={handleSubmit} className="flex flex-col items-start gap-4">

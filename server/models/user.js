@@ -1,28 +1,35 @@
 import mongoose from "mongoose";
-const Schema = mongoose.Schema;
+const Schema = mongoose.Schema
 
-const contactSchema = new Schema(
-{
-    fullName: {
+const userSchema = new Schema({
+    userName:{
+        type:String,
+        required:true,
+    },
+    name:{
         type:String,
         required:true
     },
-    phone: {
+    password: {
         type:String,
         required:true
-    }
-}
-)
+    },
+    contacts: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Contact'
+        }
+    ]
+})
 
-//make sure the data from mongo returned id as string and also not return the version
-contactSchema.set('toJSON', {
+userSchema.set('toJSON', {
     transform: (document, returnedObject) => {
         returnedObject.id = returnedObject._id.toString()
         delete returnedObject._id
         delete returnedObject.__v
-    }
+    }   
 })
 
-const Contact = mongoose.model('Contact',contactSchema)
+const User = mongoose.model('User',userSchema)
 
-export default Contact;
+export default User

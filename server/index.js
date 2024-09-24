@@ -3,7 +3,7 @@ import cors from 'cors'
 import corsOptions from "./configs/corsOptions.js";
 import connectDB from './configs/mongodb.js';
 import { config } from 'dotenv';
-import Contact from './models/user.js';
+import Contact from './models/contact.js';
 
 
 //initializing the app with express
