@@ -5,6 +5,8 @@ import connectDB from './configs/mongodb.js';
 import { config } from 'dotenv';
 import Contact from './models/contact.js';
 import User from './models/user.js';
+import jwt from 'jsonwebtoken';
+import bcrypt from 'bcrypt';
 
 
 
@@ -43,8 +45,10 @@ app.get('/contacts', async (req,res) => {
 //to create a new contact
 app.post('/contacts', async(req,res) => {
     try{
-        const { phone, firstName,lastName,email,address} = req.body
-        const user = await User.findById(body.userId)
+        const {phone,firstName,lastName,address,email,userId}  = req.body
+
+        //search our database for the user with the id 
+        const user = await User.findById(userId)
 
         //check if the fields are provided
 
@@ -52,9 +56,12 @@ app.post('/contacts', async(req,res) => {
             return res.status(400).json({error:"All fields are required"})
         }
 
-        //creating a new database
+        //creating a new contact in the database
         const contact = new Contact({
-            fullName,
+            firstName,
+            lastName,
+            email,
+            address,
             phone,
             user:user.id
         })
@@ -62,7 +69,7 @@ app.post('/contacts', async(req,res) => {
 
         //saving new contact to the database
         const savedContact = await contact.save()
-        user.contacts = user.contacts.contact(savedContact._id)
+        user.contacts = user.contacts.concat(savedContact._id)
         await user.save()
 
         //converting the contact to object
@@ -76,9 +83,9 @@ app.post('/contacts', async(req,res) => {
 })
 
 //get a specific contacts
-app.get('/contacts/:id', async(req,res) => {
+app.get('/contacts/:email', async(req,res) => {
     try{
-        const contact = await Contact.findById(req.param.id)
+        const contact = await Contact.findOne({email: req.params.email})
         if(!contact){
             return res.status(404).send()
         }
@@ -89,16 +96,15 @@ app.get('/contacts/:id', async(req,res) => {
 })
 
 //delete a contact
-app.delete('/contacts/:id', async(req,res) => {
+app.delete('/contacts/:email', async(req,res) => {
     try{
-        const { id } = req.params
-        const contact = await Contact.findByIdAndDelete(id)
+        const contact = await Contact.findOneAndDelete({email: req.params.email})
         if(!contact){
-            return res.send(404).send()
+            return res.sendStatus(404)
         }
         res.send(contact)
     }catch (error){
-        res.status(500).send(error)
+        res.status(500).json({error:"Error deleting contacts"})
     }
 })
 
@@ -106,6 +112,9 @@ app.delete('/contacts/:id', async(req,res) => {
 app.post('/user/signup', async(req,res) => {
     try{
         const {userName,name,password} = req.body
+
+        const saltRound = 10
+        const passwordHarsh = await bcrypt.hash(password, saltRound)
         
         if(!userName || !name || !password){
             res.status(500).json({error: 'All field is required'})
@@ -114,7 +123,7 @@ app.post('/user/signup', async(req,res) => {
         const user = new User({
             name,
             userName,
-            password
+            password:passwordHarsh
         })
 
         const savedUser = await user.save()
@@ -126,7 +135,25 @@ app.post('/user/signup', async(req,res) => {
 })
 
 //user signin 
+app.post('/user/signin', async(req,res) => {
+    const { userName, password}  = req.body
 
+    const user = await User.findOne({userName})
+    const passwordCorrect = user === null ? false : await bcrypt.compare(password, user.password)
+
+    if(!(userName && passwordCorrect)){
+        return res.status(401).json({error:"invalid username and password"})
+    }
+
+    const userForToken = {
+        username : user.userName,
+        id: user._id
+    }
+
+    const token = jwt.sign(userForToken,process.env.JWT_SECRET)
+    
+    res.status(200).send({token,username: user.userName, name:user.name})
+})
 
 //geting a specific user
 app.get('/user/one', async(req,res) => {

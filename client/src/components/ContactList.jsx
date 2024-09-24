@@ -21,11 +21,11 @@ function ContactList() {
     fetchData();
   }, []);
 
-  const handleDelete = async (id) => {
-    const url2 = `http://localhost:3500/contacts/${id}`;
+  const handleDelete = async (email) => {
+    const url2 = `http://localhost:3500/contacts/${email}`;
     try {
       const response = await axios.delete(url2);
-      setContacts(contacts.filter((contact) => contact.id !== id));
+      setContacts(contacts.filter((contact) => contact.email !== email));
       console.log(`Contact deleted successfully: ${response.data}`);
     } catch (error) {
       console.error(`Error deleting contact: ${error}`);
@@ -44,11 +44,14 @@ function ContactList() {
           {contacts.length === 0 && <p className="text-center text-2xl font-bold text-red-600">List is empty</p>}
           {contacts.map((contact) => (
             <div key={contact.id} className="contact-item bg-white shadow-md rounded-md px-4 py-4">
-              <h1 className="text-xl font-bold mb-2">{contact.fullName}</h1>
-              <p className="text-gray-600 mb-4">{contact.phone}</p>
+              <h1 className="text-xl font-bold mb-2">FirstName: {contact.firstName}</h1>
+              <h1 className="text-xl font-bold mb-2">SurName: {contact.lastName}</h1>
+              <h1 className="text-xl font-bold mb-2">Email: {contact.email}</h1>
+              <h1 className="text-xl font-bold mb-2">Address: {contact.address}</h1>
+              <p className="text-gray-600 mb-4">Phone: {contact.phone}</p>
               <button
                 className="inline-block px-4 py-2 bg-red-500 text-white font-bold rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
-                onClick={() => handleDelete(contacts.id)}
+                onClick={() => handleDelete(contact.email)}
               >
                 Delete
               </button>

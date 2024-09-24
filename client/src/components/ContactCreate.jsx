@@ -13,37 +13,61 @@ function ContactCreate() {
   const url = "http://localhost:3500/contacts";
   const navigate = useNavigate()
 
-  const handleName = (event) => {
+  const handleFirstName = (event) => {
     event.preventDefault();
-    setName(event.target.value);
+    setFirstName(event.target.value);
   };
 
-  const handleNumber = (event) => {
+  const handlePhone = (event) => {
     event.preventDefault();
     setPhone(event.target.value);
   };
+
+  const handleLastName = (event) => {
+    event.preventDefault()
+    setLastName(event.target.value)
+  }
+
+  const handleEmail = (event)=>{
+    event.preventDefault()
+    setEmail(event.target.value)
+  }
+
+  const handleAddress = (event) => {
+    event.preventDefault()
+    setAddress(event.target.value)
+  }
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     setSuccess('')
     setError('')
     const data = {
-      fullName: name,
+      firstName: firstName,
+      lastName:lastName,
+      address:address,
+      email:email,
       phone:phone,
     };
 
     try {
       const response = await axios.post(url, data);
       console.log(`Data sent successfully ${response}`);
-      setName("");
+      setFirstName("");
+      setLastName('')
+      setAddress('')
+      setEmail('')
       setPhone("");
       setSuccess('Contact added')
       setTimeout( navigate('/contactlist'), 2000)
     } catch (error) {
       console.error(`Error sending data: ${error}`);
       setError('Error in adding contact')
-      setName('')
-      setPhone('')
+      setFirstName("");
+      setLastName('')
+      setAddress('')
+      setEmail('')
+      setPhone("");
     }
     
   };
@@ -62,42 +86,42 @@ function ContactCreate() {
           <div className="mt-10">
             <form onSubmit={handleSubmit} className="flex flex-col max-w-lg w-full">
               <div className="flex flex-col items-start justify-start my-4">
-                <label className="text-lg font-bold mb-2">Name</label>
+                <label className="text-lg font-bold mb-2">First Name</label>
                 <input
                   type="text"
-                  value={name}
-                  placeholder="Fullname"
-                  onChange={handleName}
+                  value={firstName}
+                  placeholder="Firstname"
+                  onChange={handleFirstName}
                   className="border rounded-md border-gray-300 py-2 px-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 w-full"
                 />
               </div>
               <div className="flex flex-col items-start justify-start my-4">
-                <label className="text-lg font-bold mb-2">Name</label>
+                <label className="text-lg font-bold mb-2">Surname</label>
                 <input
                   type="text"
-                  value={name}
-                  placeholder="Fullname"
-                  onChange={handleName}
+                  value={lastName}
+                  placeholder="Surname"
+                  onChange={handleLastName}
                   className="border rounded-md border-gray-300 py-2 px-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 w-full"
                 />
               </div>
               <div className="flex flex-col items-start justify-start my-4">
-                <label className="text-lg font-bold mb-2">Name</label>
+                <label className="text-lg font-bold mb-2">Email</label>
                 <input
-                  type="text"
-                  value={name}
-                  placeholder="Fullname"
-                  onChange={handleName}
+                  type="email"
+                  value={email}
+                  placeholder="Email"
+                  onChange={handleEmail}
                   className="border rounded-md border-gray-300 py-2 px-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 w-full"
                 />
               </div>
               <div className="flex flex-col items-start justify-start my-4">
-                <label className="text-lg font-bold mb-2">Name</label>
+                <label className="text-lg font-bold mb-2">Address</label>
                 <input
                   type="text"
-                  value={name}
-                  placeholder="Fullname"
-                  onChange={handleName}
+                  value={address}
+                  placeholder="Address"
+                  onChange={handleAddress}
                   className="border rounded-md border-gray-300 py-2 px-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 w-full"
                 />
               </div>
@@ -107,7 +131,7 @@ function ContactCreate() {
                   type="text"
                   placeholder="Phone"
                   value={phone}
-                  onChange={handleNumber}
+                  onChange={handlePhone}
                   className="border rounded-md border-gray-300 py-2 px-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 w-full"
                 />
               </div>
