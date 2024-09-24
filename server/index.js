@@ -103,7 +103,7 @@ app.delete('/contacts/:id', async(req,res) => {
 })
 
 //create a new user
-app.post('/contacts/user/signup', async(req,res) => {
+app.post('/user/signup', async(req,res) => {
     try{
         const {userName,name,password} = req.body
         
@@ -119,22 +119,30 @@ app.post('/contacts/user/signup', async(req,res) => {
 
         const savedUser = await user.save()
         // const userResponse = user.toObject()
-        res.send(201).json(savedUser)
+        res.send(201)
     }catch(error){
         console.log(`Error creating user: ${error}`)
     }
 })
 
 //user signin 
-app.post('/contacts/signin' , async(req,res) => {
-    
-})
+
 
 //geting a specific user
-app.get('/contacts/user', async(req,res) => {
+app.get('/user/one', async(req,res) => {
     const user = await User.find({}).populate('contacts')
 
     res.json(user)
+})
+
+//get all the user
+app.get('/user', async(req,res)=> {
+    try{
+        const user = await User.find({})
+        res.send(user)
+    }catch(error){
+        console.log(`error fetching ${error}`)
+    }
 })
 
 
