@@ -4,6 +4,8 @@ import corsOptions from "./configs/corsOptions.js";
 import connectDB from './configs/mongodb.js';
 import { config } from 'dotenv';
 import Contact from './models/contact.js';
+import User from './models/user.js';
+
 
 
 //initializing the app with express
@@ -41,23 +43,27 @@ app.get('/contacts', async (req,res) => {
 //to create a new contact
 app.post('/contacts', async(req,res) => {
     try{
-        const { phone, fullName} = req.body
+        const { phone, firstName,lastName,email,address} = req.body
+        const user = await User.findById(body.userId)
 
         //check if the fields are provided
 
-        if(!phone || !fullName ){
+        if(!phone || !firstName || !lastName || !email || !address ){
             return res.status(400).json({error:"All fields are required"})
         }
 
         //creating a new database
         const contact = new Contact({
             fullName,
-            phone
+            phone,
+            user:user.id
         })
 
 
         //saving new contact to the database
-        await contact.save()
+        const savedContact = await contact.save()
+        user.contacts = user.contacts.contact(savedContact._id)
+        await user.save()
 
         //converting the contact to object
         const contactResponse = contact.toObject()
@@ -94,6 +100,41 @@ app.delete('/contacts/:id', async(req,res) => {
     }catch (error){
         res.status(500).send(error)
     }
+})
+
+//create a new user
+app.post('/contacts/user/signup', async(req,res) => {
+    try{
+        const {userName,name,password} = req.body
+        
+        if(!userName || !name || !password){
+            res.status(500).json({error: 'All field is required'})
+        }
+
+        const user = new User({
+            name,
+            userName,
+            password
+        })
+
+        const savedUser = await user.save()
+        // const userResponse = user.toObject()
+        res.send(201).json(savedUser)
+    }catch(error){
+        console.log(`Error creating user: ${error}`)
+    }
+})
+
+//user signin 
+app.post('/contacts/signin' , async(req,res) => {
+    
+})
+
+//geting a specific user
+app.get('/contacts/user', async(req,res) => {
+    const user = await User.find({}).populate('contacts')
+
+    res.json(user)
 })
 
 
