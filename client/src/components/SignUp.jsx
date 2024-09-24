@@ -1,6 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 function SignUp() {
   const [name, setName] = useState('');
@@ -48,7 +48,8 @@ function SignUp() {
     <section className="flex flex-col items-center justify-center mt-20">
       <main className="w-full max-w-sm p-4 bg-white rounded-lg shadow-md">
         <h1 className="text-2xl font-bold text-center mb-4">Create an Account</h1>
-        <p className="text-center mb-6">Or sign in to an existing account</p>
+        <Link to='/signin'><p className="text-center mb-6 text-blue-500">Or sign in to an existing account</p>
+        </Link>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="flex flex-col">
             <label htmlFor="name" className="text-gray-700">Name</label>

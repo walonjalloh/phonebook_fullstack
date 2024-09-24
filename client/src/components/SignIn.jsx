@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 function SignIn() {
   const [username, setUsername] = useState('');
@@ -38,7 +39,8 @@ function SignIn() {
       <main className="w-full max-w-sm p-4 bg-white rounded-lg shadow-md">
         {sucess && <p className="text-green-500 my-6">{sucess}</p>}
         {error && <p className="text-red-600 my-6">{error}</p>}
-        <h1 className="text-2xl font-bold text-center mb-4">Sign In</h1>
+        <h1 className="text-2xl font-bold text-center mb-2">Sign In</h1>
+        <Link to='/signup'><p className="text-center text-blue-500 text-md">or sign up</p></Link>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="flex flex-col">
             <label htmlFor="username" className="text-gray-700">Username</label>
