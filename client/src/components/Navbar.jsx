@@ -13,18 +13,18 @@ function Navbar() {
   return (
     <header className="sticky top-0 z-50 bg-white shadow-md">
       <nav className="container mx-auto px-4 py-2 flex justify-between items-center">
-        <div className="flex items-center">
+        <div className="flex items-center gap-2">
           <Link to="/">
             <img src={logo} alt="logo" className="w-12 h-12" />
           </Link>
-          <div className="hidden md:flex space-x-4">
+          <div className="hidden md:flex gap-5">
             <Link to="/" className="text-gray-700 hover:text-blue-500">Home</Link>
             <Link to="/contactlist" className="text-gray-700 hover:text-blue-500">PhoneBook</Link>
             <Link to="/searchcontact" className="text-gray-700 hover:text-blue-500">Search</Link>
           </div>
         </div>
         <div className=" hidden md:flex items-center space-x-4">
-          <Link to="/signup" className="bg-blue-500 text-white px-4 py-2 rounded-md">Sign Up</Link>
+          <Link to="/signup" className=" text-black border-2 border-black/50  px-4 py-2 rounded-md">Sign Up</Link>
           <Link to="/signin" className="bg-blue-500 text-white px-4 py-2 rounded-md">Sign In</Link>
         </div>
         <div className="md:hidden">
@@ -36,7 +36,7 @@ function Navbar() {
           <Link to="/" className="text-gray-700 hover:text-blue-500">Home</Link>
           <Link to="/contactlist" className="text-gray-700 hover:text-blue-500">PhoneBook</Link>
           <Link to="/searchcontact" className="text-gray-700 hover:text-blue-500">Search</Link>
-          <Link to="/signup" className="bg-blue-500 text-white px-4 py-2 rounded-md">Sign Up</Link>
+          <Link to="/signup" className=" text-black/50 border-2 border-black/50 px-4 py-2 rounded-md">Sign Up</Link>
           <Link to="/signin" className="bg-blue-500 text-white px-4 py-2 rounded-md">Sign In</Link>
         </nav>
       )}

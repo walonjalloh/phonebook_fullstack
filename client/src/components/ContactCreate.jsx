@@ -3,7 +3,10 @@ import axios from "axios";
 import { useNavigate } from 'react-router-dom'
 
 function ContactCreate() {
-  const [name, setName] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState('')
+  const [email, setEmail] = useState('')
+  const [address, setAddress] = useState('')
   const [phone, setPhone] = useState("");
   const [success, setSuccess] = useState('')
   const [error, setError] = useState('')
@@ -58,6 +61,36 @@ function ContactCreate() {
           {success && <p className="text-green-600 mb-4">{success}</p>}
           <div className="mt-10">
             <form onSubmit={handleSubmit} className="flex flex-col max-w-lg w-full">
+              <div className="flex flex-col items-start justify-start my-4">
+                <label className="text-lg font-bold mb-2">Name</label>
+                <input
+                  type="text"
+                  value={name}
+                  placeholder="Fullname"
+                  onChange={handleName}
+                  className="border rounded-md border-gray-300 py-2 px-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 w-full"
+                />
+              </div>
+              <div className="flex flex-col items-start justify-start my-4">
+                <label className="text-lg font-bold mb-2">Name</label>
+                <input
+                  type="text"
+                  value={name}
+                  placeholder="Fullname"
+                  onChange={handleName}
+                  className="border rounded-md border-gray-300 py-2 px-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 w-full"
+                />
+              </div>
+              <div className="flex flex-col items-start justify-start my-4">
+                <label className="text-lg font-bold mb-2">Name</label>
+                <input
+                  type="text"
+                  value={name}
+                  placeholder="Fullname"
+                  onChange={handleName}
+                  className="border rounded-md border-gray-300 py-2 px-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 w-full"
+                />
+              </div>
               <div className="flex flex-col items-start justify-start my-4">
                 <label className="text-lg font-bold mb-2">Name</label>
                 <input
