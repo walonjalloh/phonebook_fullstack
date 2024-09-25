@@ -28,9 +28,11 @@ config()
 connectDB()
 
 
+//test route
 app.get('/', (req,res) => {
     res.send('<h1>Hello World</h1>')
 })
+
 
 //read all contacts
 app.get('/contacts', async (req,res) => {
@@ -41,6 +43,7 @@ app.get('/contacts', async (req,res) => {
         res.status(500).send(error)
     }
 })
+
 
 //to create a new contact
 app.post('/contacts', async(req,res) => {
@@ -69,6 +72,8 @@ app.post('/contacts', async(req,res) => {
 
         //saving new contact to the database
         const savedContact = await contact.save()
+
+        //save the contact_id to the user who created it
         user.contacts = user.contacts.concat(savedContact._id)
         await user.save()
 
@@ -113,21 +118,26 @@ app.post('/user/signup', async(req,res) => {
     try{
         const {userName,name,password} = req.body
 
+        //making a hash values to be used to hashed the password
         const saltRound = 10
+
+        //entered password to be hashed for safety
         const passwordHarsh = await bcrypt.hash(password, saltRound)
         
+
+        //checking if all the fields are provided
         if(!userName || !name || !password){
             res.status(500).json({error: 'All field is required'})
         }
 
+        //making the new user 
         const user = new User({
             name,
             userName,
             password:passwordHarsh
         })
 
-        const savedUser = await user.save()
-        // const userResponse = user.toObject()
+        await user.save()
         res.send(201)
     }catch(error){
         console.log(`Error creating user: ${error}`)
@@ -136,38 +146,50 @@ app.post('/user/signup', async(req,res) => {
 
 //user signin 
 app.post('/user/signin', async(req,res) => {
-    const { userName, password}  = req.body
+    try{
+        const { userName, password}  = req.body
 
     const user = await User.findOne({userName})
     const passwordCorrect = user === null ? false : await bcrypt.compare(password, user.password)
 
+    //checking if the password and username is valid
     if(!(userName && passwordCorrect)){
         return res.status(401).json({error:"invalid username and password"})
     }
 
+    //generating the user to be used and give the token to
     const userForToken = {
         username : user.userName,
         id: user._id
     }
 
+    //getting the token for the signined user
     const token = jwt.sign(userForToken,process.env.JWT_SECRET)
     
     res.status(200).send({token,username: user.userName, name:user.name})
+    }
+    //catching error in the sigining process
+    catch(error){
+        console.log(error)
+        res.status(400).json(error)
+    }
 })
+
 
 //geting a specific user
-app.get('/user/one', async(req,res) => {
-    const user = await User.find({}).populate('contacts')
-
+app.get('/user/:email', async(req,res) => {
+    const user = await User.findOne({email: req.params.email})
     res.json(user)
 })
+
 
 //get all the user
 app.get('/user', async(req,res)=> {
     try{
         const user = await User.find({})
         res.send(user)
-    }catch(error){
+    }
+    catch(error){
         console.log(`error fetching ${error}`)
     }
 })
